@@ -1,5 +1,4 @@
 using System.Globalization;
-using Teqniqly.Sluggo;
 
 namespace Teqniqly.Sluggo.Tests
 {

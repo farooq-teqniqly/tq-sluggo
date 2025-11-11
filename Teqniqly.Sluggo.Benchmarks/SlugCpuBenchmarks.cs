@@ -1,5 +1,4 @@
 using BenchmarkDotNet.Attributes;
-using Teqniqly.Sluggo;
 
 namespace Teqniqly.Sluggo.Benchmarks;
 
