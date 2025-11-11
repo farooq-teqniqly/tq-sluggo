@@ -19,6 +19,7 @@ namespace Teqniqly.Sluggo
                 ['Æ'] = "AE",
                 ['œ'] = "oe",
                 ['Œ'] = "OE",
+                ['ð'] = "d",
             };
 
         /// <summary>

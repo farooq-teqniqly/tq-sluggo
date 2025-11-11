@@ -71,6 +71,8 @@ namespace Teqniqly.Sluggo.Tests
         [InlineData("North America / United States", "north-america-united-states")]
         [InlineData("Côte d'Or", "cote-d-or")]
         [InlineData("Straße", "strasse")]
+        [InlineData("Æsir & Óðinn", "aesir-and-odinn")]
+        [InlineData("Château Mouton Rothschild 2018", "chateau-mouton-rothschild-2018")]
         public void From_Given_Default_Options_Should_Slugify_String(string before, string after)
         {
             Assert.Equal(after, Slug.From(before));
