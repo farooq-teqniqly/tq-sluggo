@@ -1,7 +1,7 @@
 using System.Globalization;
 using Teqniqly.Sluggo;
 
-namespace TqSluggo.Tests
+namespace Teqniqly.Sluggo.Tests
 {
     public sealed class SlugTests
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqSluggo", "TqSluggo\TqSluggo.csproj", "{2AC5B69F-C233-4ED8-9AB6-C63DFE010182}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Sluggo", "Teqniqly.Sluggo\Teqniqly.Sluggo.csproj", "{2AC5B69F-C233-4ED8-9AB6-C63DFE010182}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,9 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqSluggo.Tests", "TqSluggo.Tests\TqSluggo.Tests.csproj", "{34680FD7-AA09-4A98-B498-6CB1915E04EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Sluggo.Tests", "Teqniqly.Sluggo.Tests\Teqniqly.Sluggo.Tests.csproj", "{34680FD7-AA09-4A98-B498-6CB1915E04EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TqSluggo.Benchmarks", "TqSluggo.Benchmarks\TqSluggo.Benchmarks.csproj", "{7BF07261-2436-4F11-9B42-25BC8D2C40A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Sluggo.Benchmarks", "Teqniqly.Sluggo.Benchmarks\Teqniqly.Sluggo.Benchmarks.csproj", "{7BF07261-2436-4F11-9B42-25BC8D2C40A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

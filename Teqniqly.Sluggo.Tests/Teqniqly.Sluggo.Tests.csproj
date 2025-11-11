@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TqSluggo\TqSluggo.csproj" />
+    <ProjectReference Include="..\Teqniqly.Sluggo\Teqniqly.Sluggo.csproj" />
   </ItemGroup>
 
   <ItemGroup>
