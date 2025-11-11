@@ -121,6 +121,34 @@ namespace Teqniqly.Sluggo.Tests
             Assert.Equal(once, twice);
         }
 
+        [Theory]
+        [InlineData("ABC", "ABC")]
+        [InlineData("Test", "Test")]
+        [InlineData("UPPERCASE", "UPPERCASE")]
+        [InlineData("Mixed123", "Mixed123")]
+        public void From_When_Lowercase_False_Preserves_Case_For_ASCII_Letters(
+            string input,
+            string expected
+        )
+        {
+            var options = new SlugOptions { Lowercase = false };
+
+            // All ASCII letters should be preserved with original case when Lowercase = false
+            var actual = Slug.From(input, options);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void From_When_Lowercase_False_Preserves_Uppercase_Letters()
+        {
+            var options = new SlugOptions { Lowercase = false };
+
+            // Uppercase ASCII letters should be preserved when Lowercase = false
+            // Currently this fails due to a bug where uppercase letters are treated as separators
+            var actual = Slug.From("Abc", options);
+            Assert.Equal("Abc", actual); // Expected: "Abc", but bug causes "bc" (leading 'A' treated as separator)
+        }
+
         [Fact]
         public void From_When_Options_Null_Throws_Exception()
         {

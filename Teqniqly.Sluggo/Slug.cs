@@ -307,8 +307,10 @@ namespace Teqniqly.Sluggo
         /// <returns>True if the character is allowed, false otherwise.</returns>
         private static bool IsAllowedAscii(char c, SlugOptions options)
         {
-            // Fast allow for digits/letters (lowercase already applied if options.Lowercase == true)
-            if (c is >= 'a' and <= 'z' or >= '0' and <= '9')
+            // Fast allow for digits/letters (considering case preservation setting)
+            if ((c >= '0' && c <= '9') ||
+                (c >= 'a' && c <= 'z') ||
+                (!options.Lowercase && c >= 'A' && c <= 'Z'))
             {
                 return true;
             }
