@@ -25,7 +25,7 @@ namespace Teqniqly.Sluggo.Tests
         }
 
         [Fact]
-        public void From_Given_Custom_Options_AsciOnly_False_Keeps_Unicode_Letters()
+        public void From_Given_Custom_Options_AsciiOnly_False_Keeps_Unicode_Letters()
         {
             var options = new SlugOptions { AsciiOnly = false };
 
@@ -152,7 +152,7 @@ namespace Teqniqly.Sluggo.Tests
         [Fact]
         public void From_When_Options_Null_Throws_Exception()
         {
-            Assert.Throws<ArgumentNullException>(() => Slug.From("foo", null!));
+            Assert.Throws<ArgumentNullException>(() => Slug.From(string.Empty, null!));
         }
 
         [Fact]

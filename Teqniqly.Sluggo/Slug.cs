@@ -55,12 +55,12 @@ namespace Teqniqly.Sluggo
         /// </example>
         public static string From(string? input, SlugOptions options)
         {
+            ArgumentNullException.ThrowIfNull(options);
+
             if (string.IsNullOrWhiteSpace(input))
             {
                 return string.Empty;
             }
-
-            ArgumentNullException.ThrowIfNull(options);
 
             var pre = ApplyPreReplacements(input, options.PreReplacements).Trim();
             var normalized = pre.Normalize(NormalizationForm.FormD);
@@ -308,9 +308,11 @@ namespace Teqniqly.Sluggo
         private static bool IsAllowedAscii(char c, SlugOptions options)
         {
             // Fast allow for digits/letters (considering case preservation setting)
-            if ((c >= '0' && c <= '9') ||
-                (c >= 'a' && c <= 'z') ||
-                (!options.Lowercase && c >= 'A' && c <= 'Z'))
+            if (
+                (c >= '0' && c <= '9')
+                || (c >= 'a' && c <= 'z')
+                || (!options.Lowercase && c >= 'A' && c <= 'Z')
+            )
             {
                 return true;
             }
