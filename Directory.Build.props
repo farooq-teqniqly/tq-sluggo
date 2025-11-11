@@ -23,4 +23,8 @@
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
+
+    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Benchmarks'))">
+        <PackageReference Include="BenchmarkDotNet" />
+    </ItemGroup>
 </Project>
