@@ -69,86 +69,10 @@ namespace Teqniqly.Sluggo
 
             for (var i = 0; i < normalized.Length; i++)
             {
-                var ch = normalized[i];
-
-                // Skip diacritic marks
-                var cat = CharUnicodeInfo.GetUnicodeCategory(ch);
-
-                if (cat == UnicodeCategory.NonSpacingMark)
-                {
-                    continue;
-                }
-
-                var c = options.Lowercase ? char.ToLowerInvariant(ch) : ch;
-
-                // Fast ASCII path
-                if (c <= 0x7F)
-                {
-                    if (IsAllowedAscii(c, options))
-                    {
-                        sb.Append(c);
-                        prevWasSep = false;
-                        continue;
-                    }
-
-                    // If not allowed ASCII, treat as separator
-                    AppendSeparatorIfNeeded(
-                        sb,
-                        ref prevWasSep,
-                        options.Separator,
-                        options.CollapseSeparators
-                    );
-                    continue;
-                }
-
-                // Non-ASCII
-                if (!options.AsciiOnly && char.IsLetterOrDigit(c))
-                {
-                    // If keeping wider Unicode, allow letters and digits
-                    sb.Append(c);
-                    prevWasSep = false;
-                    continue;
-                }
-
-                // Try a CharMap fallback (e.g., 'ß'->"ss", 'æ'->"ae")
-                if (
-                    options.CharMap is not null
-                    && (
-                        options.CharMap.TryGetValue(c, out var mapped)
-                        || (c != ch && options.CharMap.TryGetValue(ch, out mapped))
-                    )
-                )
-                {
-                    AppendMapped(sb, mapped, ref prevWasSep, options.Separator, options);
-                    continue;
-                }
-
-                // Otherwise separator
-                AppendSeparatorIfNeeded(
-                    sb,
-                    ref prevWasSep,
-                    options.Separator,
-                    options.CollapseSeparators
-                );
+                ProcessCharacter(normalized[i], sb, ref prevWasSep, options);
             }
 
-            // 4) Trim leading/trailing separators if configured
-            var result = options.TrimSeparators
-                ? TrimSeparators(sb.ToString(), options.Separator)
-                : sb.ToString();
-
-            // 5) Enforce max length, avoiding trailing separators
-            if (result.Length > options.MaxLength && options.MaxLength > 0)
-            {
-                result = result[..options.MaxLength];
-
-                if (options.TrimSeparators)
-                {
-                    result = TrimTrailingSeparator(result, options.Separator);
-                }
-            }
-
-            return result;
+            return FinalizeSlug(sb.ToString(), options);
         }
 
         /// <summary>
@@ -300,6 +224,33 @@ namespace Teqniqly.Sluggo
         }
 
         /// <summary>
+        /// Finalizes the slug by applying separator trimming and length constraints.
+        /// </summary>
+        /// <param name="rawSlug">The raw slug string before final processing.</param>
+        /// <param name="options">The slug generation options.</param>
+        /// <returns>The finalized slug string.</returns>
+        private static string FinalizeSlug(string rawSlug, SlugOptions options)
+        {
+            // Apply separator trimming if configured
+            var result = options.TrimSeparators
+                ? TrimSeparators(rawSlug, options.Separator)
+                : rawSlug;
+
+            // Enforce max length constraint
+            if (result.Length > options.MaxLength && options.MaxLength > 0)
+            {
+                result = result[..options.MaxLength];
+
+                if (options.TrimSeparators)
+                {
+                    result = TrimTrailingSeparator(result, options.Separator);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Determines if an ASCII character is allowed based on the configured AllowedCharPolicy.
         /// </summary>
         /// <param name="c">The ASCII character to check.</param>
@@ -325,6 +276,116 @@ namespace Teqniqly.Sluggo
                 AllowedCharPolicy.UrlFriendlyExtended => c is '_' or '.' or '~',
                 _ => false,
             };
+        }
+
+        /// <summary>
+        /// Processes an ASCII character and appends the result to the StringBuilder.
+        /// </summary>
+        /// <param name="c">The processed character (potentially lowercased).</param>
+        /// <param name="sb">The StringBuilder to append to.</param>
+        /// <param name="prevWasSep">Reference to flag tracking if the previous character was a separator.</param>
+        /// <param name="options">The slug generation options.</param>
+        private static void ProcessAsciiCharacter(
+            char c,
+            StringBuilder sb,
+            ref bool prevWasSep,
+            SlugOptions options
+        )
+        {
+            if (IsAllowedAscii(c, options))
+            {
+                sb.Append(c);
+                prevWasSep = false;
+            }
+            else
+            {
+                AppendSeparatorIfNeeded(
+                    sb,
+                    ref prevWasSep,
+                    options.Separator,
+                    options.CollapseSeparators
+                );
+            }
+        }
+
+        /// <summary>
+        /// Processes a single character and appends the appropriate result to the StringBuilder.
+        /// </summary>
+        /// <param name="ch">The original character from the normalized input.</param>
+        /// <param name="sb">The StringBuilder to append results to.</param>
+        /// <param name="prevWasSep">Reference to flag tracking if the previous character was a separator.</param>
+        /// <param name="options">The slug generation options.</param>
+        private static void ProcessCharacter(
+            char ch,
+            StringBuilder sb,
+            ref bool prevWasSep,
+            SlugOptions options
+        )
+        {
+            // Skip diacritic marks
+            var cat = CharUnicodeInfo.GetUnicodeCategory(ch);
+            if (cat == UnicodeCategory.NonSpacingMark)
+            {
+                return;
+            }
+
+            var c = options.Lowercase ? char.ToLowerInvariant(ch) : ch;
+
+            // Fast ASCII path
+            if (c <= 0x7F)
+            {
+                ProcessAsciiCharacter(c, sb, ref prevWasSep, options);
+                return;
+            }
+
+            // Non-ASCII path
+            ProcessUnicodeCharacter(c, ch, sb, ref prevWasSep, options);
+        }
+
+        /// <summary>
+        /// Processes a Unicode character and appends the result to the StringBuilder.
+        /// </summary>
+        /// <param name="c">The processed character (potentially lowercased).</param>
+        /// <param name="originalCh">The original character before processing.</param>
+        /// <param name="sb">The StringBuilder to append to.</param>
+        /// <param name="prevWasSep">Reference to flag tracking if the previous character was a separator.</param>
+        /// <param name="options">The slug generation options.</param>
+        private static void ProcessUnicodeCharacter(
+            char c,
+            char originalCh,
+            StringBuilder sb,
+            ref bool prevWasSep,
+            SlugOptions options
+        )
+        {
+            // Allow Unicode letters and digits if not ASCII-only
+            if (!options.AsciiOnly && char.IsLetterOrDigit(c))
+            {
+                sb.Append(c);
+                prevWasSep = false;
+                return;
+            }
+
+            // Try character mapping fallback
+            if (
+                options.CharMap is not null
+                && (
+                    options.CharMap.TryGetValue(c, out var mapped)
+                    || (c != originalCh && options.CharMap.TryGetValue(originalCh, out mapped))
+                )
+            )
+            {
+                AppendMapped(sb, mapped, ref prevWasSep, options.Separator, options);
+                return;
+            }
+
+            // Default to separator
+            AppendSeparatorIfNeeded(
+                sb,
+                ref prevWasSep,
+                options.Separator,
+                options.CollapseSeparators
+            );
         }
 
         /// <summary>
