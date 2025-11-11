@@ -416,3 +416,12 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Python exclusions
+Lib/
+__pycache__/
+pyvenv.cfg
+.idea
+
+.regression-detected
+.regression-severity
