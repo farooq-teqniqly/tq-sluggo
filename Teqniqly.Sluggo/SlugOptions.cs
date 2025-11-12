@@ -128,7 +128,8 @@ namespace Teqniqly.Sluggo
         /// <remarks>
         /// <para>These replacements are applied to the raw input string before any Unicode processing, making them useful for expanding abbreviations or improving readability.</para>
         /// <para>The replacements use ordinal string comparison for performance and predictability.</para>
-        /// <para>Empty keys or values are ignored. Set to an empty dictionary to disable all pre-replacements.</para>
+        /// <para>Null or empty keys will cause an <see cref="ArgumentException"/> to be thrown to prevent infinite loops. Empty values are allowed and will be used as empty string replacements.</para>
+        /// <para>Set to an empty dictionary to disable all pre-replacements.</para>
         /// </remarks>
         /// <example>
         /// <code>
