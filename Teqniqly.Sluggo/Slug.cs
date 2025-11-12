@@ -182,6 +182,7 @@ namespace Teqniqly.Sluggo
         /// <param name="input">The input string to process.</param>
         /// <param name="replacements">Dictionary of replacement mappings (key -> replacement value).</param>
         /// <returns>The input string with replacements applied, or the original string if no replacements are configured.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="replacements"/> contains null or empty keys.</exception>
         private static string ApplyPreReplacements(
             string input,
             IReadOnlyDictionary<string, string> replacements
@@ -190,6 +191,12 @@ namespace Teqniqly.Sluggo
             if (replacements.Count == 0)
             {
                 return input;
+            }
+
+            // Validate that no keys are null or empty to prevent infinite loops
+            if (replacements.Keys.Any(string.IsNullOrEmpty))
+            {
+                throw new ArgumentException("Pre-replacement keys cannot be null or empty.", nameof(replacements));
             }
 
             // Simple pass using StringBuilder; replacement keys are small and few.
@@ -204,29 +211,28 @@ namespace Teqniqly.Sluggo
                 {
                     var key = kvp.Key;
 
-                    if (string.IsNullOrEmpty(key))
+                    if (
+                        i + key.Length > input.Length
+                        || string.Compare(input, i, key, 0, key.Length, StringComparison.Ordinal)
+                            != 0
+                    )
                     {
                         continue;
                     }
 
-                    if (
-                        i + key.Length <= input.Length
-                        && string.Compare(input, i, key, 0, key.Length, StringComparison.Ordinal)
-                            == 0
-                    )
-                    {
-                        sb.Append(kvp.Value);
-                        i += key.Length;
-                        replaced = true;
-                        break;
-                    }
+                    sb.Append(kvp.Value);
+                    i += key.Length;
+                    replaced = true;
+                    break;
                 }
 
-                if (!replaced)
+                if (replaced)
                 {
-                    sb.Append(input[i]);
-                    i++;
+                    continue;
                 }
+
+                sb.Append(input[i]);
+                i++;
             }
 
             return sb.ToString();
