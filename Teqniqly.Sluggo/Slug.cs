@@ -100,41 +100,50 @@ namespace Teqniqly.Sluggo
 
             for (var i = 0; i < mapped.Length; i++)
             {
-                var m = options.Lowercase ? char.ToLowerInvariant(mapped[i]) : mapped[i];
+                ProcessMappedCharacter(mapped[i], sb, ref prevWasSep, sep, options);
+            }
+        }
 
-                if (m <= 0x7F)
+        /// <summary>
+        /// Processes a single character from a mapped string and appends the result to the StringBuilder.
+        /// </summary>
+        /// <param name="ch">The character to process.</param>
+        /// <param name="sb">The StringBuilder to append to.</param>
+        /// <param name="prevWasSep">Reference to flag tracking if the previous character was a separator.</param>
+        /// <param name="sep">The separator character.</param>
+        /// <param name="options">The slug generation options.</param>
+        private static void ProcessMappedCharacter(
+            char ch,
+            StringBuilder sb,
+            ref bool prevWasSep,
+            char sep,
+            SlugOptions options
+        )
+        {
+            var m = options.Lowercase ? char.ToLowerInvariant(ch) : ch;
+
+            if (m <= 0x7F)
+            {
+                if (IsAllowedAscii(m, options))
                 {
-                    if (IsAllowedAscii(m, options))
-                    {
-                        sb.Append(m);
-                        prevWasSep = false;
-                    }
-                    else
-                    {
-                        AppendSeparatorIfNeeded(
-                            sb,
-                            ref prevWasSep,
-                            sep,
-                            options.CollapseSeparators
-                        );
-                    }
+                    sb.Append(m);
+                    prevWasSep = false;
                 }
                 else
                 {
-                    if (!options.AsciiOnly && char.IsLetterOrDigit(m))
-                    {
-                        sb.Append(m);
-                        prevWasSep = false;
-                    }
-                    else
-                    {
-                        AppendSeparatorIfNeeded(
-                            sb,
-                            ref prevWasSep,
-                            sep,
-                            options.CollapseSeparators
-                        );
-                    }
+                    AppendSeparatorIfNeeded(sb, ref prevWasSep, sep, options.CollapseSeparators);
+                }
+            }
+            else
+            {
+                if (!options.AsciiOnly && char.IsLetterOrDigit(m))
+                {
+                    sb.Append(m);
+                    prevWasSep = false;
+                }
+                else
+                {
+                    AppendSeparatorIfNeeded(sb, ref prevWasSep, sep, options.CollapseSeparators);
                 }
             }
         }
