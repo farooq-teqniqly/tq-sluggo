@@ -21,6 +21,22 @@ namespace Teqniqly.Sluggo.Tests
         }
 
         [Fact]
+        public void From_Given_CharMap_With_Non_Ascii_Symbols_In_Mapping_Treats_Symbols_As_Separators()
+        {
+            var options = new SlugOptions
+            {
+                CharMap = new Dictionary<char, string>
+                {
+                    ['©'] = "©™", // Map copyright to copyright and trademark symbols
+                },
+            };
+
+            var actual = Slug.From("Hello©World", options);
+
+            Assert.Equal("hello-world", actual);
+        }
+
+        [Fact]
         public void From_Given_Custom_CharMap_Should_Slugify_String()
         {
             var options = new SlugOptions
