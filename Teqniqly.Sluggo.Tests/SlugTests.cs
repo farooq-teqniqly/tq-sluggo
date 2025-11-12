@@ -129,6 +129,20 @@ namespace Teqniqly.Sluggo.Tests
         }
 
         [Fact]
+        public void From_Given_PreReplacements_With_Empty_Key_Throws_ArgumentException()
+        {
+            var options = new SlugOptions
+            {
+                PreReplacements = new Dictionary<string, string>
+                {
+                    [""] = "replacement", // Empty key should cause exception
+                },
+            };
+
+            Assert.Throws<ArgumentException>(() => Slug.From("Hello World", options));
+        }
+
+        [Fact]
         public void From_Is_Culture_Invariant()
         {
             var prevCulture = CultureInfo.CurrentCulture;

@@ -182,6 +182,7 @@ namespace Teqniqly.Sluggo
         /// <param name="input">The input string to process.</param>
         /// <param name="replacements">Dictionary of replacement mappings (key -> replacement value).</param>
         /// <returns>The input string with replacements applied, or the original string if no replacements are configured.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="replacements"/> contains null or empty keys.</exception>
         private static string ApplyPreReplacements(
             string input,
             IReadOnlyDictionary<string, string> replacements
@@ -190,6 +191,12 @@ namespace Teqniqly.Sluggo
             if (replacements.Count == 0)
             {
                 return input;
+            }
+
+            // Validate that no keys are null or empty to prevent infinite loops
+            if (replacements.Keys.Any(string.IsNullOrEmpty))
+            {
+                throw new ArgumentException("Pre-replacement keys cannot be null or empty.", nameof(replacements));
             }
 
             // Simple pass using StringBuilder; replacement keys are small and few.
