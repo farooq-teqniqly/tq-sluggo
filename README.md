@@ -4,6 +4,7 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Teqniqly.Sluggo.svg)](https://www.nuget.org/packages/Teqniqly.Sluggo/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/farooq-teqniqly/tq-sluggo/ci.yml)](https://github.com/farooq-teqniqly/tq-sluggo/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=farooq-teqniqly_tq-sluggo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=farooq-teqniqly_tq-sluggo)
 
 A fast, dependency-free C# library for generating deterministic, URL-safe slugs from arbitrary strings with Unicode support.
 
