@@ -77,6 +77,16 @@ namespace Teqniqly.Sluggo.Tests
             Assert.Equal(after, Slug.From(before));
         }
 
+        [Fact]
+        public void From_Given_No_PreReplacements_Should_Slugify_String()
+        {
+            var options = new SlugOptions { PreReplacements = new Dictionary<string, string>() };
+
+            var actual = Slug.From("Hello & Goodbye", options);
+
+            Assert.Equal("hello-goodbye", actual);
+        }
+
         [Theory]
         [InlineData("")]
         [InlineData("  ")]

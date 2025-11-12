@@ -204,29 +204,28 @@ namespace Teqniqly.Sluggo
                 {
                     var key = kvp.Key;
 
-                    if (string.IsNullOrEmpty(key))
+                    if (
+                        i + key.Length > input.Length
+                        || string.Compare(input, i, key, 0, key.Length, StringComparison.Ordinal)
+                            != 0
+                    )
                     {
                         continue;
                     }
 
-                    if (
-                        i + key.Length <= input.Length
-                        && string.Compare(input, i, key, 0, key.Length, StringComparison.Ordinal)
-                            == 0
-                    )
-                    {
-                        sb.Append(kvp.Value);
-                        i += key.Length;
-                        replaced = true;
-                        break;
-                    }
+                    sb.Append(kvp.Value);
+                    i += key.Length;
+                    replaced = true;
+                    break;
                 }
 
-                if (!replaced)
+                if (replaced)
                 {
-                    sb.Append(input[i]);
-                    i++;
+                    continue;
                 }
+
+                sb.Append(input[i]);
+                i++;
             }
 
             return sb.ToString();
