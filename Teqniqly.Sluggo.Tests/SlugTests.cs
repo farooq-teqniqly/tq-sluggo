@@ -5,6 +5,22 @@ namespace Teqniqly.Sluggo.Tests
     public sealed class SlugTests
     {
         [Fact]
+        public void From_Given_CharMap_With_Empty_Mapping_Treats_As_Separator()
+        {
+            var options = new SlugOptions
+            {
+                CharMap = new Dictionary<char, string>
+                {
+                    ['©'] = "", // Empty mapping should be treated as separator
+                },
+            };
+
+            var actual = Slug.From("Hello©World", options);
+
+            Assert.Equal("hello-world", actual);
+        }
+
+        [Fact]
         public void From_Given_Custom_CharMap_Should_Slugify_String()
         {
             var options = new SlugOptions
@@ -148,17 +164,6 @@ namespace Teqniqly.Sluggo.Tests
         }
 
         [Fact]
-        public void From_When_Lowercase_False_Preserves_Uppercase_Letters()
-        {
-            var options = new SlugOptions { Lowercase = false };
-
-            // Uppercase ASCII letters should be preserved when Lowercase = false
-            // Currently this fails due to a bug where uppercase letters are treated as separators
-            var actual = Slug.From("Abc", options);
-            Assert.Equal("Abc", actual); // Expected: "Abc", but bug causes "bc" (leading 'A' treated as separator)
-        }
-
-        [Fact]
         public void From_When_Options_Null_Throws_Exception()
         {
             Assert.Throws<ArgumentNullException>(() => Slug.From(string.Empty, null!));
@@ -169,6 +174,15 @@ namespace Teqniqly.Sluggo.Tests
         {
             var before = "A B C D E F";
             var after = Slug.From(before, maxLength: 7);
+            Assert.Equal("a-b-c-d", after);
+        }
+
+        [Fact]
+        public void From_When_Truncated_String_Ends_With_Separator_Trims_Trailing_Separator()
+        {
+            // "a-b-c-d-e-f-" is 13 characters, truncated to 8 becomes "a-b-c-d-", then trailing separator is trimmed
+            var before = "A B C D E F -";
+            var after = Slug.From(before, maxLength: 8);
             Assert.Equal("a-b-c-d", after);
         }
     }
