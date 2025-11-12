@@ -106,7 +106,7 @@ When analyzing benchmark results, consider:
 
 ## Baseline Results
 
-### CPU Benchmarks
+### CPU Baseline Results
 
 **Key Takeaways:**
 
@@ -116,7 +116,7 @@ When analyzing benchmark results, consider:
 -   Memory allocation is minimal for most operations (1896-2976 B)
 -   Empty/whitespace inputs are very fast (~200-211 ns)
 
-### Memory Benchmarks
+### Memory Baseline Results
 
 **Key Takeaways:**
 
