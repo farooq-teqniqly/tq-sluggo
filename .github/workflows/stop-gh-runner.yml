@@ -1,0 +1,53 @@
+name: Stop GitHub Runner VM
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      azure_resource_group_name:
+        description: "Name of the Azure resource group containing the VM"
+        required: true
+        default: "tq-sluggo-rg"
+      azure_vm_name:
+        description: "Name of the Azure VM to stop"
+        required: true
+        default: "tq-sluggo-perf-runner"
+env:
+    AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.azure_resource_group_name || 'tq-sluggo-rg' }}
+    AZURE_VM_NAME: ${{ github.event.inputs.azure_vm_name || 'tq-sluggo-perf-runner' }}
+
+permissions:
+  contents: read
+
+jobs:
+  stop-vm:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+    steps:
+        - name: Validate required secrets
+          run: |
+            missing_secrets=()
+
+            if [ -z "$AZURE_CREDENTIALS" ]; then
+                missing_secrets+=("AZURE_CREDENTIALS")
+            fi
+
+            if [ ${#missing_secrets[@]} -ne 0 ]; then
+                echo "Missing required secrets: ${missing_secrets[*]}"
+                echo "Please configure these secrets in your repository settings."
+                exit 1
+            fi
+
+            echo "All required secrets are configured"
+
+        - name: Login to Azure
+          uses: azure/login@8c334a195cbb38e46038007b304988d888bf676a
+          with:
+            creds: ${{ env.AZURE_CREDENTIALS }}
+
+        - name: Deallocate VM
+          run: |
+            set -euo pipefail
+            az vm deallocate -g "$AZURE_RESOURCE_GROUP_NAME" -n "$AZURE_VM_NAME"
+            az vm get-instance-view -g "$AZURE_RESOURCE_GROUP_NAME" -n "$AZURE_VM_NAME" --query "instanceView.statuses[?starts_with(code,'PowerState/')].displayStatus" -o tsv
