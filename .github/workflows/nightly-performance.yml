@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: performance-review
-          path: performance_reviews/nightly/performance-review-*.md
+          path: performance_reviews/ci/nightly/performance-review-*.md
           retention-days: 90
 
       - name: Check for regressions
