@@ -71,8 +71,8 @@ jobs:
         run: |
           python .github/scripts/compare-benchmarks.py \
             --baseline performance_reviews/ci/baselines/baseline-current.json \
-            --cpu-results BenchmarkDotNet.Artifacts/results/Teqniqly.Sluggo.Benchmarks.ResultCpuBenchmarks-report-github.md \
-            --memory-results BenchmarkDotNet.Artifacts/results/Teqniqly.Sluggo.Benchmarks.ResultMemoryBenchmarks-report-github.md \
+            --cpu-results BenchmarkDotNet.Artifacts/results/Teqniqly.Sluggo.Benchmarks.SlugCpuBenchmarks-report.csv \
+            --memory-results BenchmarkDotNet.Artifacts/results/Teqniqly.Sluggo.Benchmarks.SlugMemoryBenchmarks-report.csv \
             --output performance_reviews/ci/nightly/performance-review-$(date +%Y-%m-%d).md \
             --new-baseline performance_reviews/ci/baselines/baseline-new.json \
             --commit ${{ github.sha }}
