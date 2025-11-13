@@ -2,10 +2,15 @@ name: Deploy to NuGet
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+*'  # Matches v1.0.0, v1.0.0-beta, v1.0.0-alpha.1, etc.
 
   workflow_dispatch:
+
+env:
+    PROJECT_NAME: Teqniqly.Sluggo
 
 jobs:
   build-and-test:
@@ -38,14 +43,21 @@ jobs:
       with:
         name: build-artifacts-${{ matrix.dotnet-version }}
         path: |
-          Teqniqly.Sluggo/bin/Release/
-          Teqniqly.Sluggo/obj/Release/
+          ${{env.PROJECT_NAME}}/bin/Release/
+          ${{env.PROJECT_NAME}}/obj/Release/
         retention-days: 1
 
   sonarqube-analysis:
     name: SonarQube Code Coverage
     runs-on: ubuntu-latest
     needs: build-and-test
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+
+    env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_PROJECT_KEY: farooq-teqniqly_tq-sluggo
+        SONAR_ORGANIZATION: farooq-teqniqly
+        SONAR_EXCLUSIONS: "**/*.Tests/**,**/*.Benchmarks/**,**/*.py"
 
     steps:
       - name: Checkout code
@@ -74,18 +86,16 @@ jobs:
         run: dotnet restore
 
       - name: Begin SonarQube analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-            /k:"farooq-teqniqly_tq-sluggo" \
-            /o:"farooq-teqniqly" \
-            /d:sonar.token="${SONAR_TOKEN}" \
+            /k:"${{env.SONAR_PROJECT_KEY}}" \
+            /o:"${{env.SONAR_ORGANIZATION}}" \
+            /d:sonar.token="${{env.SONAR_TOKEN}}" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
             /d:sonar.security.enableProjectScan=true \
             /d:sonar.qualitygate.wait=true \
-            /d:sonar.coverage.exclusions="**/*.Tests/**,**/*.Benchmarks/**,**/*.py" \
+            /d:sonar.coverage.exclusions="${{env.SONAR_EXCLUSIONS}}"
 
       - name: Build solution
         run: dotnet build --configuration Release --no-restore
@@ -97,14 +107,12 @@ jobs:
             -f xml -o coverage.xml
 
       - name: End SonarQube analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner end /d:sonar.token="${SONAR_TOKEN}"
+        run: dotnet sonarscanner end /d:sonar.token="${{env.SONAR_TOKEN}}"
 
   deploy:
     name: Deploy to NuGet
     runs-on: ubuntu-latest
-    needs: sonarqube-analysis
+    needs: build-and-test
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
@@ -132,15 +140,15 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: build-artifacts-9.0.x
-        path: Teqniqly.Sluggo/
+        path: ${{env.PROJECT_NAME}}/
 
     - name: Restore dependencies
-      run: dotnet restore Teqniqly.Sluggo/Teqniqly.Sluggo.csproj
+      run: dotnet restore ${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}.csproj
 
     - name: Pack NuGet package
-      run: dotnet pack Teqniqly.Sluggo/Teqniqly.Sluggo.csproj --configuration Release --no-restore --output ./nupkg /p:PackageVersion=${{ steps.version.outputs.version }}
+      run: dotnet pack ${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}.csproj --configuration Release --no-restore --output ./nupkg /p:PackageVersion=${{ steps.version.outputs.version }}
 
     - name: Push to NuGet
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet nuget push ./nupkg/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+      run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{env.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
