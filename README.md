@@ -1,10 +1,12 @@
 # Teqniqly.Sluggo
 
-[![NuGet Version](https://img.shields.io/nuget/v/Teqniqly.Sluggo.svg)](https://www.nuget.org/packages/Teqniqly.Sluggo/)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/Teqniqly.Sluggo.svg)](https://www.nuget.org/packages/Teqniqly.Sluggo/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/farooq-teqniqly/tq-sluggo/ci.yml)](https://github.com/farooq-teqniqly/tq-sluggo/actions)
+[![NuGet](https://img.shields.io/nuget/v/Teqniqly.Sluggo)](https://www.nuget.org/packages/Teqniqly.Sluggo)
+[![Build and Test](https://github.com/farooq-teqniqly/tq-sluggo/workflows/Deploy%20to%20NuGet/badge.svg)](https://github.com/farooq-teqniqly/tq-sluggo/actions)
+[![Nightly Performance Benchmarks](https://github.com/farooq-teqniqly/tq-sluggo/workflows/Nightly%20Performance%20Benchmarks/badge.svg)](https://github.com/farooq-teqniqly/tq-sluggo/actions)
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-blue)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![.NET 9](https://img.shields.io/badge/.NET-9.0-blue)](https://dotnet.microsoft.com/download/dotnet/9.0)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=farooq-teqniqly_tq-sluggo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=farooq-teqniqly_tq-sluggo)
+
 
 A fast, dependency-free C# library for generating deterministic, URL-safe slugs from arbitrary strings with Unicode support.
 
