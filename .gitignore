@@ -425,3 +425,5 @@ pyvenv.cfg
 
 .regression-detected
 .regression-severity
+
+.sonarqube/
