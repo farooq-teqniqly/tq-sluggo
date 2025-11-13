@@ -1,7 +1,7 @@
 name: Start GitHub Runner VM
 on:
   schedule:
-    - cron: "0 23 * * *"
+    - cron: "0 22 * * 0"
   workflow_dispatch:
     inputs:
       azure_resource_group_name:
@@ -29,7 +29,7 @@ jobs:
           run: |
             missing_secrets=()
 
-            if [ -z "$AZURE_CREDENTIALS" ]; then
+            if [ -z "${{env.AZURE_CREDENTIALS}}" ]; then
                 missing_secrets+=("AZURE_CREDENTIALS")
             fi
 
@@ -49,11 +49,11 @@ jobs:
         - name: Start VM if not already running
           run: |
             set -euo pipefail
-            state=$(az vm show -d -g "$AZURE_RESOURCE_GROUP_NAME" -n "$AZURE_VM_NAME" --query powerState -o tsv || echo "unknown")
+            state=$(az vm show -d -g "${{env.AZURE_RESOURCE_GROUP_NAME}}" -n "${{env.AZURE_VM_NAME}}" --query powerState -o tsv || echo "unknown")
             echo "Current state: $state"
             if [ "$state" != "VM running" ]; then
-                az vm start -g "$AZURE_RESOURCE_GROUP_NAME" -n "$AZURE_VM_NAME"
+                az vm start -g "${{env.AZURE_RESOURCE_GROUP_NAME}}" -n "${{env.AZURE_VM_NAME}}"
             else
                 echo "Already running."
             fi
-            az vm get-instance-view -g "$AZURE_RESOURCE_GROUP_NAME" -n "$AZURE_VM_NAME" --query "instanceView.statuses[?starts_with(code,'PowerState/')].displayStatus" -o tsv
+            az vm get-instance-view -g "${{env.AZURE_RESOURCE_GROUP_NAME}}" -n "${{env.AZURE_VM_NAME}}" --query "instanceView.statuses[?starts_with(code,'PowerState/')].displayStatus" -o tsv
