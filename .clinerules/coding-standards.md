@@ -19,6 +19,7 @@ tags: ["coding-standards", "dotnet", "best-practices"]
 -   **SOLID principles**: Follow Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion principles
 -   **DRY principle**: Don't Repeat Yourself - extract common code into reusable components
 -   **Clean code**: Write self-documenting code with meaningful names and clear structure
+-   **Cognitive complexity**: Keep method cognitive complexity at 15 or less to maintain readability and understandability
 -   **Using statements**: Remove all unused using statements to keep code clean and maintainable
 
 ## C# Specific Guidelines
