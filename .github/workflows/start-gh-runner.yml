@@ -41,19 +41,10 @@ jobs:
 
             echo "All required secrets are configured"
 
-        - name: Login to Azure
-          uses: azure/login@8c334a195cbb38e46038007b304988d888bf676a
+        - name: Start runner VM
+          uses: farooq-teqniqly/azure-vm-control@3e1d436051ad5a0fe4d73547801f8761f5fd05dc
           with:
-            creds: ${{ env.AZURE_CREDENTIALS }}
-
-        - name: Start VM if not already running
-          run: |
-            set -euo pipefail
-            state=$(az vm show -d -g "${{env.AZURE_RESOURCE_GROUP_NAME}}" -n "${{env.AZURE_VM_NAME}}" --query powerState -o tsv || echo "unknown")
-            echo "Current state: $state"
-            if [ "$state" != "VM running" ]; then
-                az vm start -g "${{env.AZURE_RESOURCE_GROUP_NAME}}" -n "${{env.AZURE_VM_NAME}}"
-            else
-                echo "Already running."
-            fi
-            az vm get-instance-view -g "${{env.AZURE_RESOURCE_GROUP_NAME}}" -n "${{env.AZURE_VM_NAME}}" --query "instanceView.statuses[?starts_with(code,'PowerState/')].displayStatus" -o tsv
+            azure_resource_group_name: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+            azure_vm_name: ${{ env.AZURE_VM_NAME }}
+            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            operation: 'start'
