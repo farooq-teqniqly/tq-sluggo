@@ -1,164 +1,164 @@
 {
-  "date": "2025-11-30T22:43:07.515167",
-  "commit": "6a5789d43e49253d0ab71f5ed264279a0285c71d",
+  "date": "2025-12-07T22:42:27.732707",
+  "commit": "db6ddaf321c661467986c9c0562247afb6f98ed8",
   "runtime": ".NET 9.0",
   "cpu_benchmarks": [
     {
       "name": "CreateSlug_Empty_String",
-      "mean_ns": 276.5,
-      "error_ns": 2.02,
-      "stddev_ns": 1.79,
+      "mean_ns": 270.7,
+      "error_ns": 1.39,
+      "stddev_ns": 1.23,
       "allocated_bytes": 976
     },
     {
       "name": "CreateSlug_Long_Text_Truncated",
-      "mean_ns": 7737.6,
-      "error_ns": 32.72,
-      "stddev_ns": 27.32,
+      "mean_ns": 7754.2,
+      "error_ns": 44.91,
+      "stddev_ns": 35.06,
       "allocated_bytes": 8824
     },
     {
       "name": "CreateSlug_No_Trim_Separators",
-      "mean_ns": 981.5,
-      "error_ns": 3.88,
-      "stddev_ns": 3.44,
+      "mean_ns": 1008.4,
+      "error_ns": 16.87,
+      "stddev_ns": 14.96,
       "allocated_bytes": 1248
     },
     {
       "name": "CreateSlug_Simple_Ascii_Default",
-      "mean_ns": 1069.7,
-      "error_ns": 8.06,
-      "stddev_ns": 7.15,
+      "mean_ns": 1084.1,
+      "error_ns": 19.15,
+      "stddev_ns": 17.91,
       "allocated_bytes": 1960
     },
     {
       "name": "CreateSlug_Simple_Overload_Custom",
-      "mean_ns": 1081.1,
-      "error_ns": 5.26,
-      "stddev_ns": 4.4,
+      "mean_ns": 1074.3,
+      "error_ns": 2.36,
+      "stddev_ns": 1.84,
       "allocated_bytes": 1960
     },
     {
       "name": "CreateSlug_Special_Chars_Default",
-      "mean_ns": 1806.0,
-      "error_ns": 3.16,
-      "stddev_ns": 2.47,
+      "mean_ns": 1769.1,
+      "error_ns": 7.98,
+      "stddev_ns": 6.66,
       "allocated_bytes": 2856
     },
     {
       "name": "CreateSlug_Special_Chars_Extended",
-      "mean_ns": 1466.0,
-      "error_ns": 5.34,
-      "stddev_ns": 4.46,
+      "mean_ns": 1460.0,
+      "error_ns": 22.37,
+      "stddev_ns": 20.93,
       "allocated_bytes": 1856
     },
     {
       "name": "CreateSlug_Underscore_Separator",
-      "mean_ns": 746.1,
-      "error_ns": 3.14,
-      "stddev_ns": 2.79,
+      "mean_ns": 735.4,
+      "error_ns": 1.9,
+      "stddev_ns": 1.69,
       "allocated_bytes": 960
     },
     {
       "name": "CreateSlug_Unicode_Text_Default",
-      "mean_ns": 2179.7,
-      "error_ns": 7.06,
-      "stddev_ns": 6.26,
+      "mean_ns": 2228.7,
+      "error_ns": 22.44,
+      "stddev_ns": 20.99,
       "allocated_bytes": 3040
     },
     {
       "name": "CreateSlug_Unicode_Text_Unicode_Allowed",
-      "mean_ns": 1829.1,
-      "error_ns": 7.41,
-      "stddev_ns": 6.19,
+      "mean_ns": 1816.8,
+      "error_ns": 6.31,
+      "stddev_ns": 4.93,
       "allocated_bytes": 2040
     },
     {
       "name": "CreateSlug_Whitespace_Only",
-      "mean_ns": 272.5,
-      "error_ns": 1.41,
-      "stddev_ns": 1.25,
+      "mean_ns": 274.1,
+      "error_ns": 1.0,
+      "stddev_ns": 0.84,
       "allocated_bytes": 976
     }
   ],
   "memory_benchmarks": [
     {
       "name": "BulkCreateSlugs_Default_Options",
-      "mean_ns": 1700000.0,
-      "error_ns": 3700.0,
-      "stddev_ns": 3100.0,
+      "mean_ns": 1675000.0,
+      "error_ns": 10300.0,
+      "stddev_ns": 9200.0,
       "allocated_bytes": 1908408,
       "gen0": 113.2813,
       "gen1": 25.3906
     },
     {
       "name": "BulkCreateSlugs_Extended_Chars",
-      "mean_ns": 1702000.0,
-      "error_ns": 6700.0,
-      "stddev_ns": 5300.0,
+      "mean_ns": 1691000.0,
+      "error_ns": 3600.0,
+      "stddev_ns": 3000.0,
       "allocated_bytes": 1908408,
       "gen0": 113.2813,
       "gen1": 25.3906
     },
     {
       "name": "BulkCreateSlugs_Unicode_Allowed",
-      "mean_ns": 1763000.0,
-      "error_ns": 8700.0,
-      "stddev_ns": 7200.0,
+      "mean_ns": 1691000.0,
+      "error_ns": 16400.0,
+      "stddev_ns": 15300.0,
       "allocated_bytes": 1908408,
       "gen0": 113.2813,
       "gen1": 25.3906
     },
     {
       "name": "Chained_Slug_Operations",
-      "mean_ns": 6525000.0,
-      "error_ns": 31100.0,
-      "stddev_ns": 27600.0,
+      "mean_ns": 6736000.0,
+      "error_ns": 62799.99999999999,
+      "stddev_ns": 52500.0,
       "allocated_bytes": 9531555,
       "gen0": 562.5,
       "gen1": 132.8125
     },
     {
       "name": "Create_New_Options_Instance",
-      "mean_ns": 2111000.0,
-      "error_ns": 10600.0,
-      "stddev_ns": 9400.0,
+      "mean_ns": 2037000.0,
+      "error_ns": 8600.0,
+      "stddev_ns": 6700.0,
       "allocated_bytes": 2915041,
       "gen0": 171.875,
       "gen1": 39.0625
     },
     {
       "name": "Filter_And_Store_Slugs_With_Linq",
-      "mean_ns": 2099000.0,
-      "error_ns": 7700.0,
-      "stddev_ns": 6400.0,
+      "mean_ns": 2115000.0,
+      "error_ns": 18100.0,
+      "stddev_ns": 16900.0,
       "allocated_bytes": 2915041,
       "gen0": 171.875,
       "gen1": 39.0625
     },
     {
       "name": "Process_Large_Payload",
-      "mean_ns": 4114000.0,
-      "error_ns": 25700.0,
-      "stddev_ns": 21500.0,
+      "mean_ns": 4176000.0,
+      "error_ns": 50800.0,
+      "stddev_ns": 45000.0,
       "allocated_bytes": 5274337,
       "gen0": 312.5,
       "gen1": 179.6875
     },
     {
       "name": "Reuse_Options_Instance",
-      "mean_ns": 1657000.0,
-      "error_ns": 6400.0,
-      "stddev_ns": 5700.0,
+      "mean_ns": 1704000.0,
+      "error_ns": 7500.0,
+      "stddev_ns": 6600.0,
       "allocated_bytes": 1908408,
       "gen0": 113.2813,
       "gen1": 27.3438
     },
     {
       "name": "StoreSlugs_In_Dictionary",
-      "mean_ns": 2080000.0,
-      "error_ns": 11800.0,
-      "stddev_ns": 9800.0,
+      "mean_ns": 2173000.0,
+      "error_ns": 11500.0,
+      "stddev_ns": 9600.0,
       "allocated_bytes": 2936012,
       "gen0": 171.875,
       "gen1": 19.5313
